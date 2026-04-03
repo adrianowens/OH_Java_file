@@ -74,6 +74,11 @@ public List<Map<String, String>> getOrganizationByName(boolean addDefault, Strin
     String param = secureString(text);
     List<Map<String, String>> organizationList = new ArrayList<>();
     
+    // Validate the language parameter to ensure only allowed values (fr or en) are used
+    if (!"fr".equals(language) && !"en".equals(language)) {
+        throw new IllegalArgumentException("Invalid language: " + language + ". Expected 'fr' or 'en'.");
+    }
+    
     String query = "SELECT Org_ID, OrganizationName, " +
                    (language.equals("fr") ? "dl.Location_Label_French" : "dl.Location_Label") + " AS region, " +
                    "do.postalCode FROM DimOrganization do " +
@@ -83,6 +88,7 @@ public List<Map<String, String>> getOrganizationByName(boolean addDefault, Strin
                    "AND OrganizationName LIKE ? ORDER BY OrganizationName";
     
     try (PreparedStatement stmt = sqlConn.prepareStatement(query)) {
+        // OrganizationName parameter is set safely via prepared statement
         stmt.setString(1, "%" + param + "%");
         ResultSet rs = stmt.executeQuery();
         
