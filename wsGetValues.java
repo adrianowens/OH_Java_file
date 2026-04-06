@@ -1,4 +1,5 @@
-// comment added AEO 27 March 2026﻿
+// comment added AEO 27 March 2026
+// comment 01 of 02 by AEO on 6 APR 2026
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -942,7 +943,7 @@ public String getTableDataByCity(String q, String language) {
 
     return sb.toString();
 }
-
+// comment 02 of 02 by AEO on 6 APR 2026
 @WebMethod
 public String getTableDataByInd(String indicator, String q, String language) {
     StringBuilder sb = new StringBuilder();
