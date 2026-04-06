@@ -504,18 +504,13 @@ public class OrganizationDataAccess {
     }
 
     public ResultSet getOrganizationByCity(String param, String language) throws SQLException {
-        String sqlString = "SELECT Org_ID, OrganizationName, dl1.Location_Label AS city, dl2.Location_Label AS Region, OrgCategory_Label AS HospType, do.postalCode FROM DimOrganization do " +
-                "INNER JOIN DimOrgType dot ON do.OrgType_ID = dot.OrgType_ID " +
-                "INNER JOIN DimOrganizationCategory doc ON doc.OrgCategory_ID = do.OrgCatID " +
-                "INNER JOIN dimlocation dl1 ON do.City_LocationID = dl1.Location_ID " +
-                "INNER JOIN dimlocation dl2 ON do.Region_LocationID = dl2.Location_ID " +
-                "WHERE dot.orgType_label = 'Warehouse Institution' AND do.WT_PublicReporting = 1 AND dl1.Location_Label = '" + param + "' " +
-                "ORDER BY OrganizationName";
+        String sqlString = "SELECT Org_ID, OrganizationName, dl1.Location_Label AS city, dl2.Location_Label AS Region, OrgCategory_Label AS HospType, do.postalCode FROM DimOrganization do INNER JOIN DimOrgType dot ON do.OrgType_ID = dot.OrgType_ID INNER JOIN DimOrganizationCategory doc ON doc.OrgCategory_ID = do.OrgCatID INNER JOIN dimlocation dl1 ON do.City_LocationID = dl1.Location_ID INNER JOIN dimlocation dl2 ON do.Region_LocationID = dl2.Location_ID WHERE dot.orgType_label = 'Warehouse Institution' AND do.WT_PublicReporting = 1 AND dl1.Location_Label = ? ORDER BY OrganizationName";
 
-        Statement stmt = connection.createStatement();
-        ResultSet ds = stmt.executeQuery(sqlString);
+        PreparedStatement stmt = connection.prepareStatement(sqlString);
+        stmt.setString(1, param);
 
-        return ds; // Returning the ResultSet directly
+        ResultSet ds = stmt.executeQuery();
+        return ds;
     }
 
     private String secureString(String input) {
