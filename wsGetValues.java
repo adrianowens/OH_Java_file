@@ -537,9 +537,10 @@ public class OrganizationDataAccess {
         param = param.trim().replace("_", "").replace("-", "").replace(" ", "");
         param = param.substring(0, 3) + " " + param.substring(3); // Insert space after third character
 
-        String sqlString = "SELECT Latitude, Longitude FROM PostalCodes WHERE PostalCode = '" + param + "'";
-        Statement stmt = connection.createStatement();
-        return stmt.executeQuery(sqlString);
+        String sqlString = "SELECT Latitude, Longitude FROM PostalCodes WHERE PostalCode = ?";
+        PreparedStatement stmt = connection.prepareStatement(sqlString);
+        stmt.setString(1, param);
+        return stmt.executeQuery();
     }
 
     public String getTableDataByName(String q, String language) throws SQLException {
